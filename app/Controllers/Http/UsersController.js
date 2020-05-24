@@ -1,3 +1,4 @@
+/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
 
 class UsersController {
@@ -7,7 +8,7 @@ class UsersController {
     const hasUser = await User.findBy('email', userData.email);
 
     if (hasUser) {
-      return response.status(400).json({
+      return response.status(409).json({
         status: 'error',
         message: 'This e-mail already exist',
       });
@@ -22,7 +23,7 @@ class UsersController {
       });
     }
 
-    const token = await auth.attempt(userData.email, userData.password);
+    const { token } = await auth.attempt(userData.email, userData.password);
 
     return response.json({ user, token });
   }

@@ -28,6 +28,7 @@
     "uuidv4": "^6.0.9"
   },
   "devDependencies": {
+    "@adonisjs/vow": "^1.0.17",
     "eslint": "^7.1.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.11.0",
