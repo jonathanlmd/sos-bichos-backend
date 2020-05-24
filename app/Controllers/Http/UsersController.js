@@ -1,10 +1,10 @@
 const User = use('App/Models/User');
 
 class UsersController {
-  async create({ request, response }) {
+  async create({ request, response, auth }) {
     const userData = request.only(['name', 'email', 'password']);
 
-    const hasUser = User.findBy('email', userData.email);
+    const hasUser = await User.findBy('email', userData.email);
 
     if (hasUser) {
       return response.status(400).json({
@@ -15,7 +15,16 @@ class UsersController {
 
     const user = await User.create(userData);
 
-    return response.json(user);
+    if (!user) {
+      return response.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      });
+    }
+
+    const token = await auth.attempt(userData.email, userData.password);
+
+    return response.json({ user, token });
   }
 }
 
