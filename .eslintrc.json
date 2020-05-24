@@ -1,0 +1,29 @@
+{
+    "env": {
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb-base",
+        "plugin:prettier/recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly",
+        "use": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": [
+      "prettier"
+  ],
+    "rules": {
+      "no-useless-constructor": "off",
+			"no-underscore-dangle": "off",
+			"prettier/prettier": "error",
+      "class-methods-use-this": "off"
+    }
+}
