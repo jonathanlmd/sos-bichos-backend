@@ -12,6 +12,10 @@ class Address extends Model {
       });
     });
   }
+
+  user() {
+    return this.belongsTo('App/Models/User', 'id_user', 'id');
+  }
 }
 
 module.exports = Address;

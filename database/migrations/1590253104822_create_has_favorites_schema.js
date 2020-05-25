@@ -1,11 +1,9 @@
-'use strict'
-
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use('Schema')
+const Schema = use('Schema');
 
 class HasFavorites extends Schema {
-  up () {
-    this.create('has_favorites', (table) => {
+  up() {
+    this.create('has_favorites', table => {
       table.uuid('id').unique().primary().notNullable();
       table
         .uuid('id_user')
@@ -21,12 +19,12 @@ class HasFavorites extends Schema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
         .notNullable();
-    })
+    });
   }
 
-  down () {
-    this.drop('has_favorites')
+  down() {
+    this.drop('has_favorites');
   }
 }
 
-module.exports = HasFavorites
+module.exports = HasFavorites;

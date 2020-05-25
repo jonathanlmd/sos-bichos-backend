@@ -5,6 +5,12 @@ class Addresses extends Schema {
   up() {
     this.create('addresses', table => {
       table.uuid('id').unique().primary().notNullable();
+      table
+        .uuid('id_user')
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE');
       table.string('public_place').notNullable();
       table.string('city').notNullable();
       table.string('uf').notNullable();

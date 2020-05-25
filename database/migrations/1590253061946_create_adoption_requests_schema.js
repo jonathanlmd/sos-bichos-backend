@@ -1,11 +1,9 @@
-'use strict'
-
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use('Schema')
+const Schema = use('Schema');
 
 class AdoptionRequests extends Schema {
-  up () {
-    this.create('adoption_requests', (table) => {
+  up() {
+    this.create('adoption_requests', table => {
       table.uuid('id').unique().primary().notNullable();
       table.boolean('approved').notNullable().defaultTo(false);
       table.boolean('completed').notNullable().defaultTo(false);
@@ -27,12 +25,12 @@ class AdoptionRequests extends Schema {
       table.date('approved_at');
       table.date('concluded_at');
       table.timestamps(true);
-    })
+    });
   }
 
-  down () {
-    this.drop('adoption_requests')
+  down() {
+    this.drop('adoption_requests');
   }
 }
 
-module.exports = AdoptionRequests
+module.exports = AdoptionRequests;

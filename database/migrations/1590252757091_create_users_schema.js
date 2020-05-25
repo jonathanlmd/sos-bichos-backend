@@ -9,12 +9,6 @@ class Users extends Schema {
       table.string('email').notNullable();
       table.string('password').notNullable();
       table.string('occupation');
-      table
-        .uuid('id_adress')
-        .references('id')
-        .inTable('addresses')
-        .onDelete('SET NULL')
-        .onUpdate('CASCADE');
       table.date('birthdate');
       table.timestamps(true);
     });

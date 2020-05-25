@@ -1,11 +1,9 @@
-'use strict'
-
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use('Schema')
+const Schema = use('Schema');
 
 class Pets extends Schema {
-  up () {
-    this.create('pets', (table) => {
+  up() {
+    this.create('pets', table => {
       table.uuid('id').unique().primary().notNullable();
       table.string('name').notNullable();
       table.string('sex').notNullable();
@@ -19,12 +17,12 @@ class Pets extends Schema {
       table.date('rescued_at').notNullable();
       table.date('birthdate');
       table.timestamps(true);
-    })
+    });
   }
 
-  down () {
-    this.drop('pets')
+  down() {
+    this.drop('pets');
   }
 }
 
-module.exports = Pets
+module.exports = Pets;

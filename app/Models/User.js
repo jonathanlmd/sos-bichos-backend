@@ -38,6 +38,10 @@ class User extends Model {
     return this.hasMany('App/Models/Token', 'id', 'id_user');
   }
 
+  address() {
+    return this.hasOne('App/Models/Address', 'id', 'id_user');
+  }
+
   static get hidden() {
     return ['password'];
   }
