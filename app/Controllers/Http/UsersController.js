@@ -2,7 +2,7 @@
 const User = use('App/Models/User');
 
 class UsersController {
-  async create({ request, response, auth }) {
+  async store({ request, response, auth }) {
     const userData = request.only(['name', 'email', 'password']);
 
     const hasUser = await User.findBy('email', userData.email);

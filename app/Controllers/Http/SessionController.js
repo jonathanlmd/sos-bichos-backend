@@ -16,13 +16,6 @@ class SessionController {
 
     const { token } = await auth.attempt(email, password);
 
-    if (!token) {
-      return response.status(401).json({
-        status: 'error',
-        message: "Email or password don't match",
-      });
-    }
-
     return { user, token };
   }
 }

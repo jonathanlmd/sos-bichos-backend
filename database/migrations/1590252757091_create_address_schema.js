@@ -1,11 +1,9 @@
-'use strict'
-
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use('Schema')
+const Schema = use('Schema');
 
 class Addresses extends Schema {
-  up () {
-    this.create('addresses', (table) => {
+  up() {
+    this.create('addresses', table => {
       table.uuid('id').unique().primary().notNullable();
       table.string('public_place').notNullable();
       table.string('city').notNullable();
@@ -13,12 +11,12 @@ class Addresses extends Schema {
       table.string('country').notNullable();
       table.string('complement');
       table.timestamps(true);
-    })
+    });
   }
 
-  down () {
-    this.drop('addresses')
+  down() {
+    this.drop('addresses');
   }
 }
 
-module.exports = Addresses
+module.exports = Addresses;
