@@ -12,7 +12,7 @@ class SessionController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async authenticate({ request, response, auth }) {
+  async store({ request, response, auth }) {
     const { email, password } = request.all();
 
     const user = await User.findBy('email', email);
@@ -23,6 +23,7 @@ class SessionController {
         message: "Email or password don't match",
       });
     }
+    await user.load('address');
 
     const { token } = await auth.attempt(email, password);
 

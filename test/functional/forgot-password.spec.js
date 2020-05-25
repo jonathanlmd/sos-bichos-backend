@@ -10,7 +10,7 @@ const Hash = use('Hash');
 /** @type {import('@adonisjs/mail/src/Mail')} */
 const Mail = use('Mail');
 
-const { subHours, parseISO } = require('date-fns');
+const { subHours } = require('date-fns');
 
 trait('Test/ApiClient');
 trait('DatabaseTransactions');

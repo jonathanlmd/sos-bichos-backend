@@ -21,8 +21,28 @@ Factory.blueprint('App/Models/User', (faker, i, data) => {
 
 Factory.blueprint('App/Models/Token', (faker, i, data) => {
   return {
-    type: data.type || 'refreshtoken',
+    type: data.type || 'bearer',
     token: faker.string({ length: 20 }),
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/Address', (faker, i, data) => {
+  return {
+    public_place: faker.address(),
+    city: faker.city(),
+    uf: faker.state({ length: 2 }),
+    country: faker.country(),
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/Pet', (faker, i, data) => {
+  return {
+    name: faker.name(),
+    sex: faker.gender(),
+    description: faker.string({ length: 20 }),
+    rescued_at: faker.date(),
     ...data,
   };
 });

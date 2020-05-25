@@ -19,10 +19,12 @@ Route.post('/user/create', 'UsersController.store').validator([
   'PasswordConfirmation',
 ]);
 
-Route.post('/session', 'SessionController.authenticate').validator(['Email']);
+Route.post('/session', 'SessionController.store').validator(['Email']);
 
 Route.post('/forgot', 'ForgotPasswordController.store').validator(['Email']);
 
 Route.patch('/reset', 'ResetPasswordController.update').validator(
   'PasswordConfirmation'
 );
+
+Route.get('pets/:page?', 'PetController.index').middleware(['auth']);
