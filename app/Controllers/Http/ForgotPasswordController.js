@@ -1,3 +1,7 @@
+/** @typedef {import('@adonisjs/framework/src/Request')} Request */
+/** @typedef {import('@adonisjs/framework/src/Response')} Response */
+/** @typedef {import('@adonisjs/auth/src/Schemes/Session')} AuthSession */
+
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
 
@@ -10,6 +14,11 @@ const Env = use('Env');
 const Mail = use('Mail');
 
 class ForgotPasswordController {
+  /**
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
   async store({ request, response }) {
     const { email } = request.only(['email']);
 

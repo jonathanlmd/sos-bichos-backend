@@ -1,11 +1,9 @@
-'use strict'
-
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use('Schema')
+const Schema = use('Schema');
 
 class Adverts extends Schema {
-  up () {
-    this.create('adverts', (table) => {
+  up() {
+    this.create('adverts', table => {
       table.uuid('id').unique().primary().notNullable();
       table.integer('times').notNullable().notNullable();
       table
@@ -22,12 +20,12 @@ class Adverts extends Schema {
         .onDelete('SET NULL')
         .onUpdate('CASCADE')
         .notNullable();
-    })
+    });
   }
 
-  down () {
-    this.drop('adverts')
+  down() {
+    this.drop('adverts');
   }
 }
 
-module.exports = Adverts
+module.exports = Adverts;

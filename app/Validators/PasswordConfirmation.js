@@ -13,6 +13,10 @@ class PasswordConfirmation {
       'password_confirmation.same': "Password and confirmation don't match",
     };
   }
+
+  async fails(errorMessages) {
+    return this.ctx.response.json(errorMessages);
+  }
 }
 
 module.exports = PasswordConfirmation;

@@ -1,7 +1,17 @@
+/** @typedef {import('@adonisjs/framework/src/Request')} Request */
+/** @typedef {import('@adonisjs/framework/src/Response')} Response */
+/** @typedef {import('@adonisjs/auth/src/Schemes/Session')} AuthSession */
+
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
 
 class SessionController {
+  /**
+   * @param {object} ctx
+   * @param {AuthSession} ctx.auth
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
   async authenticate({ request, response, auth }) {
     const { email, password } = request.all();
 
