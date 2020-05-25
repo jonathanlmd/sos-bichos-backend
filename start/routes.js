@@ -28,3 +28,15 @@ Route.patch('/reset', 'ResetPasswordController.update').validator(
 );
 
 Route.get('pets/:page?', 'PetController.index').middleware(['auth']);
+
+Route.patch('/user/favorite/:id', 'FavoriteController.store').middleware([
+  'auth',
+]);
+
+Route.get('/user/favorites/:page?', 'FavoriteController.show').middleware([
+  'auth',
+]);
+
+Route.delete('/user/disfavor/:id', 'FavoriteController.destroy').middleware([
+  'auth',
+]);

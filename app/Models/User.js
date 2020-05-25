@@ -42,6 +42,16 @@ class User extends Model {
     return this.hasOne('App/Models/Address', 'id', 'id_user');
   }
 
+  favoritePets() {
+    return this.belongsToMany(
+      'App/Models/Pet',
+      'id_user',
+      'id_pet',
+      'id',
+      'id'
+    ).pivotModel('App/Models/HasFavorite');
+  }
+
   static get hidden() {
     return ['password'];
   }

@@ -13,10 +13,12 @@ const Factory = use('Factory');
 
 class AddressSeeder {
   async run() {
-    const user = await Factory.model('App/Models/User').create();
-    const address = await Factory.model('App/Models/Address').make();
+    const users = await Factory.model('App/Models/User').createMany(3);
+    const addresses = await Factory.model('App/Models/Address').makeMany(3);
 
-    await user.address().save(address);
+    await users[0].address().save(addresses[0]);
+    await users[1].address().save(addresses[1]);
+    await users[2].address().save(addresses[2]);
   }
 }
 

@@ -19,6 +19,7 @@ class HasFavorites extends Schema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
         .notNullable();
+      table.timestamps(false);
     });
   }
 

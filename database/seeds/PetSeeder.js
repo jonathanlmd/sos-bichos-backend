@@ -13,7 +13,7 @@ const Factory = use('Factory');
 
 class PetSeeder {
   async run() {
-    await Factory.model('App/Models/Pet').createMany(35);
+    await Factory.model('App/Models/Pet').createMany(20);
   }
 }
 

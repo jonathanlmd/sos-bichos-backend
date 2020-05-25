@@ -43,6 +43,8 @@ Factory.blueprint('App/Models/Pet', (faker, i, data) => {
     sex: faker.gender(),
     description: faker.string({ length: 20 }),
     rescued_at: faker.date(),
+    birthdate: faker.date(),
+    id_user_owner: null,
     ...data,
   };
 });

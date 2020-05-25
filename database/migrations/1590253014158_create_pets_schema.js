@@ -12,10 +12,11 @@ class Pets extends Schema {
         .uuid('id_user_owner')
         .references('id')
         .inTable('users')
+        .defaultTo(null)
         .onDelete('SET NULL')
         .onUpdate('CASCADE');
       table.date('rescued_at').notNullable();
-      table.date('birthdate');
+      table.date('birthdate').defaultTo(null);
       table.timestamps(true);
     });
   }
