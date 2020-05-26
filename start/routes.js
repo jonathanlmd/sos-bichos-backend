@@ -14,6 +14,12 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
 
+Route.get('/', ({ response }) => {
+  return response.json({
+    Hey: 'You are online ;) !',
+  });
+});
+
 Route.post('/user/create', 'UsersController.store').validator([
   'Email',
   'PasswordConfirmation',
