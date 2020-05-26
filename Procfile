@@ -1,3 +1,2 @@
-
-release:adonis migration:run --force
-web: yarn start
+release: ENV_SILENT=true node ace migration:run --force
+web: ENV_SILENT=true yarn start
