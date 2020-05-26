@@ -1,3 +1,3 @@
 
-release:adonis migration:run
+release:adonis migration:run --force
 web: yarn start
