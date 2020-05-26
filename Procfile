@@ -1,2 +1,1 @@
-web: yarn start
-web: node ace migration:run
+web:  adonis migration:run && yarn start
