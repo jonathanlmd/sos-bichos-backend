@@ -1,1 +1,3 @@
-web:  adonis migration:run && yarn start
+
+release:adonis migration:run
+web: yarn start
