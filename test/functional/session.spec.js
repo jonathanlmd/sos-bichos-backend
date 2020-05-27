@@ -7,10 +7,7 @@ trait('Test/ApiClient');
 trait('Auth/Client');
 trait('DatabaseTransactions');
 
-test('it should not be able to login with wrong email', async ({
-  assert,
-  client,
-}) => {
+test('it should be able to login', async ({ assert, client }) => {
   const sessionPayload = {
     email: 'emailtest@test.com',
     password: 'passwordtest',

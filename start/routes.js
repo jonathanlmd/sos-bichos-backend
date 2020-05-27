@@ -27,6 +27,8 @@ Route.post('/user/create', 'UsersController.store').validator([
 
 Route.post('/session', 'SessionController.store').validator(['Email']);
 
+Route.post('/session/adm', 'SessionAdmController.store').validator(['Email']);
+
 Route.post('/forgot', 'ForgotPasswordController.store').validator(['Email']);
 
 Route.patch('/reset', 'ResetPasswordController.update').validator(
@@ -46,3 +48,5 @@ Route.get('/user/favorites/:page?', 'FavoriteController.show').middleware([
 Route.delete('/user/disfavor/:id', 'FavoriteController.destroy').middleware([
   'auth',
 ]);
+
+Route.post('/pet', 'PetController.store').middleware(['auth:adminjwt']);

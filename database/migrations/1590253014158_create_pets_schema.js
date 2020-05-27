@@ -8,6 +8,7 @@ class Pets extends Schema {
       table.string('name').notNullable();
       table.string('sex').notNullable();
       table.string('description');
+      table.string('avatar').notNullable();
       table
         .uuid('id_user_owner')
         .references('id')
@@ -16,7 +17,6 @@ class Pets extends Schema {
         .onDelete('SET NULL')
         .onUpdate('CASCADE');
       table.date('rescued_at').notNullable();
-      table.date('birthdate').defaultTo(null);
       table.timestamps(true);
     });
   }

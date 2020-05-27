@@ -12,3 +12,6 @@ tmp
 
 # The development sqlite file
 database/*.sqlite
+
+#nyc
+.nyc_output/

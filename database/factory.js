@@ -21,7 +21,7 @@ Factory.blueprint('App/Models/User', (faker, i, data) => {
 
 Factory.blueprint('App/Models/Token', (faker, i, data) => {
   return {
-    type: data.type || 'bearer',
+    type: 'bearer',
     token: faker.string({ length: 20 }),
     ...data,
   };
@@ -43,8 +43,17 @@ Factory.blueprint('App/Models/Pet', (faker, i, data) => {
     sex: faker.gender(),
     description: faker.string({ length: 20 }),
     rescued_at: faker.date(),
-    birthdate: faker.date(),
+    avatar: faker.avatar(),
     id_user_owner: null,
+    ...data,
+  };
+});
+
+Factory.blueprint('App/Models/Admin', (faker, i, data) => {
+  return {
+    name: faker.name(),
+    email: faker.email(),
+    password: faker.password(),
     ...data,
   };
 });

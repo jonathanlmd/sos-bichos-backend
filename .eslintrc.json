@@ -22,7 +22,8 @@
   ],
     "rules": {
       "no-useless-constructor": "off",
-			"no-underscore-dangle": "off",
+      "no-underscore-dangle": "off",
+      "camelcase": "off",
 			"prettier/prettier": "error",
       "class-methods-use-this": "off"
     }

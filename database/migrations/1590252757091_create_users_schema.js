@@ -6,6 +6,7 @@ class Users extends Schema {
     this.create('users', table => {
       table.uuid('id').unique().primary().notNullable();
       table.string('name').notNullable();
+      table.string('avatar').defaultTo(null);
       table.string('email').notNullable();
       table.string('password').notNullable();
       table.string('occupation');

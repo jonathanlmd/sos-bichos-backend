@@ -1,0 +1,6 @@
+{
+  "all": true,
+  "include": ["app/Controllers/**", "app/Validators/**"],
+  "reporter": "html",
+  "report-dir": "test/coverage"
+}
