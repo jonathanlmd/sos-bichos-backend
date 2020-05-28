@@ -8,7 +8,7 @@ class Users extends Schema {
       table.string('name').notNullable();
       table.string('avatar').defaultTo(null);
       table.string('email').notNullable();
-      table.string('password').notNullable();
+      table.string('password');
       table.string('occupation');
       table.date('birthdate');
       table.timestamps(true);

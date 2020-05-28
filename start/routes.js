@@ -50,3 +50,5 @@ Route.delete('/user/disfavor/:id', 'FavoriteController.destroy').middleware([
 ]);
 
 Route.post('/pet', 'PetController.store').middleware(['auth:adminjwt']);
+
+Route.post('/session/social', 'SessionController.social');

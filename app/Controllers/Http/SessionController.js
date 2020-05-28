@@ -1,6 +1,7 @@
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/auth/src/Schemes/Session')} AuthSession */
+/** @typedef {import('@adonisjs/ally/src/Ally')} Ally */
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
@@ -28,6 +29,43 @@ class SessionController {
     const { token } = await auth.attempt(email, password);
 
     return { user, token };
+  }
+
+  /**
+   * @param {object} ctx
+   * @param {AuthSession} ctx.auth
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {Ally} ctx.ally
+   */
+  async social({ ally, request, response, auth }) {
+    try {
+      const { accessToken, provider } = request.all();
+
+      const providerUser = await ally
+        .driver(provider)
+        .getUserByToken(accessToken);
+
+      const userDetails = {
+        email: providerUser.getEmail(),
+        name: providerUser.getName(),
+        avatar: providerUser.getAvatar(),
+      };
+
+      const user = await User.findOrCreate(
+        { email: userDetails.email },
+        userDetails
+      );
+
+      const { token } = await auth.generate(user);
+
+      return response.json({ user, token });
+    } catch (error) {
+      return {
+        status: 'error',
+        message: 'Unable to authenticate. Try again later',
+      };
+    }
   }
 }
 
