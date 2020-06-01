@@ -15,3 +15,6 @@ database/*.sqlite
 
 #nyc
 .nyc_output/
+
+#google keyfile
+keyfile.json

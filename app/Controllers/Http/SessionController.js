@@ -61,6 +61,7 @@ class SessionController {
 
       return response.json({ user, token });
     } catch (error) {
+      console.log(error);
       return {
         status: 'error',
         message: 'Unable to authenticate. Try again later',

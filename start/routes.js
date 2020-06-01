@@ -21,15 +21,21 @@ Route.get('/', ({ response }) => {
 });
 
 Route.post('/user/create', 'UsersController.store').validator([
-  'Email',
+  'EmailExistent',
   'PasswordConfirmation',
 ]);
 
-Route.post('/session', 'SessionController.store').validator(['Email']);
+Route.post('/session', 'SessionController.store').validator([
+  'EmailForAuthentication',
+]);
 
-Route.post('/session/adm', 'SessionAdmController.store').validator(['Email']);
+Route.post('/session/adm', 'SessionAdmController.store').validator([
+  'EmailForAuthentication',
+]);
 
-Route.post('/forgot', 'ForgotPasswordController.store').validator(['Email']);
+Route.post('/forgot', 'ForgotPasswordController.store').validator([
+  'EmailForAuthentication',
+]);
 
 Route.patch('/reset', 'ResetPasswordController.update').validator(
   'PasswordConfirmation'

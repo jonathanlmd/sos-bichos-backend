@@ -5,15 +5,11 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Pet = use('App/Models/Pet');
 
-/** @type{import('@adonisjs/ignitor/src/Helpers')} */
-const Helpers = use('Helpers');
-
-const crypto = require('crypto');
+const StorageProvider = use('My/StorageProvider');
 
 class PetController {
   /**
    * @param {object} ctx
-   * @param {AuthSession} ctx.auth
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
@@ -29,6 +25,11 @@ class PetController {
     return response.json(formatPage(page.toJSON()));
   }
 
+  /**
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
   async store({ request, response }) {
     const { data } = request.all();
     const { name, sex, description, rescued_at } = JSON.parse(data);
@@ -37,24 +38,14 @@ class PetController {
       types: ['image'],
       size: '2mb',
     });
-
-    await profilePics.move(Helpers.tmpPath('uploads'), {
-      name: `${crypto.randomBytes(10).toString('HEX')}-${
-        profilePics.clientName
-      }`,
-      overwrite: true,
-    });
-
-    if (!profilePics.moved()) {
-      return profilePics.errors();
-    }
+    const fileName = await StorageProvider.saveFile(profilePics);
 
     const pet = await Pet.create({
       name,
       sex,
       description,
       rescued_at,
-      avatar: profilePics.fileName,
+      avatar: fileName,
     });
 
     return response.json(pet);

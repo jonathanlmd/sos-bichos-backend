@@ -13,7 +13,18 @@ const Factory = use('Factory');
 
 class PetSeeder {
   async run() {
-    await Factory.model('App/Models/Pet').createMany(20);
+    // eslint-disable-next-line prefer-const
+    let pets = [...Array(11).keys()];
+
+    await pets.reduce(async (previousPromise, i) => {
+      await previousPromise;
+
+      pets[i] = await Factory.model('App/Models/Pet').create({
+        avatar: `https://storage.cloud.google.com/sosbichos-test/pet${i}.jpeg`,
+      });
+
+      return Promise.resolve();
+    }, Promise.resolve());
   }
 }
 

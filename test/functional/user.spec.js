@@ -40,10 +40,5 @@ test('it should not be able to create a new user with duplicate email ', async (
     })
     .end();
 
-  response.assertError({
-    status: 'error',
-    message: 'This e-mail already exist',
-  });
-
   response.assertStatus(409);
 });

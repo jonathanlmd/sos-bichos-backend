@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for Models/Token.js</title>
+    <title>Code coverage report for Validators/EmailForAuthentication.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">Models</a> Token.js</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">Validators</a> EmailForAuthentication.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>3/5</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.67% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>3/5</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -79,47 +79,47 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Model = <span class="cstat-no" title="statement not covered" >use('Model');</span>
-&nbsp;
-const { uuid } = <span class="cstat-no" title="statement not covered" >require('uuidv4');</span>
-&nbsp;
-class Token extends Model {
-<span class="fstat-no" title="function not covered" >  st</span>atic boot() {
-<span class="cstat-no" title="statement not covered" >    super.boot();</span>
-<span class="cstat-no" title="statement not covered" >    this.addHook('beforeCreate', <span class="fstat-no" title="function not covered" >as</span>ync userInstance =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      Object.assign(userInstance, {</span>
-        id: uuid(),
-      });
-    });
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">class EmailForAuthentication {
+  get rules() {
+    return {
+      email: 'required|email',
+    };
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  us</span>er() {
-<span class="cstat-no" title="statement not covered" >    return this.belongsTo('App/Models/User', 'id_user', 'id');</span>
+  get messages() {
+    return {
+      'email.required': 'E-mail is required',
+      'email.email': 'Invalid e-mail',
+    };
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  as</span>ync fails(errorMessages) {
+<span class="cstat-no" title="statement not covered" >    console.log(errorMessages);</span>
+<span class="cstat-no" title="statement not covered" >    return this.ctx.response.json(errorMessages);</span>
   }
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >module.exports = Token;</span>
+module.exports = EmailForAuthentication;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -127,7 +127,7 @@ class Token extends Model {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun May 31 2020 14:41:58 GMT-0300 (Horário Padrão de Brasília)
+                at Mon Jun 01 2020 13:27:05 GMT-0300 (Horário Padrão de Brasília)
             </div>
         </div>
         <script src="../prettify.js"></script>

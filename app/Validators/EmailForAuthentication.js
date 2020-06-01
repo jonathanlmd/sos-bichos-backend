@@ -1,4 +1,4 @@
-class Email {
+class EmailForAuthentication {
   get rules() {
     return {
       email: 'required|email',
@@ -13,8 +13,9 @@ class Email {
   }
 
   async fails(errorMessages) {
+    console.log(errorMessages);
     return this.ctx.response.json(errorMessages);
   }
 }
 
-module.exports = Email;
+module.exports = EmailForAuthentication;

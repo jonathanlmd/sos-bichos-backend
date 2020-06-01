@@ -13,14 +13,31 @@ const Factory = use('Factory');
 
 class FavoritedPetSeeder {
   async run() {
-    const pet = await Factory.model('App/Models/Pet').createMany(10);
+    // eslint-disable-next-line prefer-const
+    let pets = [...Array(10).keys()];
+
+    await pets.reduce(
+      async (previousPromise, i) => {
+        await previousPromise;
+
+        pets[i] = await Factory.model('App/Models/Pet').create({
+          avatar: `https://storage.cloud.google.com/sosbichos-test/pet${
+            i + 11
+          }.jpeg`,
+        });
+
+        return Promise.resolve();
+      },
+      { previousPromise: Promise.resolve(), increment: 11 }
+    );
+
     const user = await Factory.model('App/Models/User').createMany(5);
 
-    await user[0].favoritePets().attach([pet[0].id, pet[1].id]);
-    await user[1].favoritePets().attach([pet[2].id, pet[3].id]);
-    await user[2].favoritePets().attach([pet[4].id, pet[5].id]);
-    await user[3].favoritePets().attach([pet[6].id, pet[7].id]);
-    await user[4].favoritePets().attach([pet[8].id, pet[9].id]);
+    await user[0].favoritePets().attach([pets[0].id, pets[1].id]);
+    await user[1].favoritePets().attach([pets[2].id, pets[3].id]);
+    await user[2].favoritePets().attach([pets[4].id, pets[5].id]);
+    await user[3].favoritePets().attach([pets[6].id, pets[7].id]);
+    await user[4].favoritePets().attach([pets[8].id, pets[9].id]);
   }
 }
 

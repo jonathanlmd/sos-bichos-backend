@@ -15,15 +15,6 @@ class UsersController {
   async store({ request, response, auth }) {
     const userData = request.only(['name', 'email', 'password']);
 
-    const hasUser = await User.findBy('email', userData.email);
-
-    if (hasUser) {
-      return response.status(409).json({
-        status: 'error',
-        message: 'This e-mail already exist',
-      });
-    }
-
     const user = await User.create(userData);
 
     if (!user) {
