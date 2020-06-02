@@ -28,25 +28,20 @@ class GoogleCloudStorage {
         },
       });
 
-      // await file.move(file.tmpPath, {
-      //   name: `${crypto.randomBytes(10).toString('HEX')}-${file.clientName}`,
-      //   overwrite: true,
-      // });
-
       const name = `${crypto.randomBytes(10).toString('HEX')}-${
         file.clientName
       }`;
-      const res = await storage
+      const [_, data] = await storage
         .bucket(this.uploadConfig.bucket)
         .upload(file.tmpPath, {
           destination: name,
           gzip: true,
           predefinedAcl: 'publicRead',
         });
-      console.log(res);
+
       await fs.promises.unlink(file.tmpPath);
 
-      return `https://storage.googleapis.com/${this.uploadConfig.bucket}/${name}`;
+      return data.mediaLink;
     } catch (err) {
       console.log(err);
     }

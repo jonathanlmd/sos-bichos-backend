@@ -14,15 +14,15 @@ class PetController {
    * @param {Response} ctx.response
    */
   async index({ request, response }) {
-    const { indexPage = 1 } = request.only(['page']);
+    const { page = 1 } = request.only(['page']);
 
     const formatPage = ({ data: pets, ...pagination }) => {
       return { pagination, pets };
     };
 
-    const page = await Pet.query().paginate(indexPage, 10);
+    const petsForPage = await Pet.query().paginate(page, 10);
 
-    return response.json(formatPage(page.toJSON()));
+    return response.json(formatPage(petsForPage.toJSON()));
   }
 
   /**

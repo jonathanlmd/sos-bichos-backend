@@ -11,25 +11,37 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory');
 
+const { Storage } = require('@google-cloud/storage');
+
 class FavoritedPetSeeder {
   async run() {
+    const uploadConfig = use('Adonis/Src/Config').get('drive.disks.gcs');
+    const storage = new Storage({
+      projectId: uploadConfig.projectId,
+      region: uploadConfig.region,
+      credentials: {
+        client_email: uploadConfig.clientEmail,
+        private_key: uploadConfig.privateKey,
+      },
+    });
+
     // eslint-disable-next-line prefer-const
     let pets = [...Array(10).keys()];
 
-    await pets.reduce(
-      async (previousPromise, i) => {
-        await previousPromise;
+    await pets.reduce(async (previousPromise, i) => {
+      await previousPromise;
 
-        pets[i] = await Factory.model('App/Models/Pet').create({
-          avatar: `https://storage.cloud.google.com/sosbichos-test/pet${
-            i + 11
-          }.jpeg`,
-        });
+      const [metadata] = await storage
+        .bucket(uploadConfig.bucket)
+        .file(`pet${i + 12}.jpeg`)
+        .getMetadata();
 
-        return Promise.resolve();
-      },
-      { previousPromise: Promise.resolve(), increment: 11 }
-    );
+      pets[i] = await Factory.model('App/Models/Pet').create({
+        avatar: metadata.mediaLink,
+      });
+
+      return Promise.resolve();
+    }, Promise.resolve());
 
     const user = await Factory.model('App/Models/User').createMany(5);
 
