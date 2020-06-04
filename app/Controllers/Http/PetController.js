@@ -13,14 +13,23 @@ class PetController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async index({ request, response }) {
+  async index({ request, response, auth }) {
     const { page = 1 } = request.only(['page']);
+    const user = await auth.getUser();
+    let favoritedPets = await user.favoritePets().select('id').fetch();
+    favoritedPets = favoritedPets.toJSON();
 
     const formatPage = ({ data: pets, ...pagination }) => {
       return { pagination, pets };
     };
 
     const petsForPage = await Pet.query().paginate(page, 10);
+
+    petsForPage.rows.forEach(pet => {
+      pet.favorited = !!favoritedPets.find(
+        favorited => favorited.id === pet.id
+      );
+    });
 
     return response.json(formatPage(petsForPage.toJSON()));
   }

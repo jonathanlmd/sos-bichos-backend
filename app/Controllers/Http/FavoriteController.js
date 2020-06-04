@@ -38,9 +38,7 @@ class FavoriteController {
     return response.json(pet.toJSON());
   }
 
-  async show({ request, response, auth }) {
-    const { indexPage = 1 } = request.only(['page']);
-
+  async show({ response, auth }) {
     const user = await auth.getUser();
 
     if (!user) {
@@ -50,13 +48,9 @@ class FavoriteController {
       });
     }
 
-    const formatPage = ({ data: pets, ...pagination }) => {
-      return { pagination, pets };
-    };
+    const pets = await user.favoritePets().fetch();
 
-    const pets = await user.favoritePets().paginate(indexPage, 10);
-
-    return response.json(formatPage(pets.toJSON()));
+    return response.json(pets.toJSON());
   }
 
   async destroy({ response, auth, params }) {
