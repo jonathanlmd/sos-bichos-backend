@@ -33,7 +33,7 @@ class FavoritedPetSeeder {
 
       const [metadata] = await storage
         .bucket(uploadConfig.bucket)
-        .file(`pet${i + 12}.jpeg`)
+        .file(`pets/pet${i + 12}.jpeg`)
         .getMetadata();
 
       pets[i] = await Factory.model('App/Models/Pet').create({

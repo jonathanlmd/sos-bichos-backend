@@ -10,6 +10,7 @@ const StorageProvider = use('My/StorageProvider');
 class PetController {
   /**
    * @param {object} ctx
+   * @param {AuthSession} ctx.auth
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
@@ -26,9 +27,9 @@ class PetController {
     const petsForPage = await Pet.query().paginate(page, 10);
 
     petsForPage.rows.forEach(pet => {
-      pet.favorited = !!favoritedPets.find(
-        favorited => favorited.id === pet.id
-      );
+      Object.assign(pet, {
+        favorited: !!favoritedPets.find(favorited => favorited.id === pet.id),
+      });
     });
 
     return response.json(formatPage(petsForPage.toJSON()));
@@ -36,6 +37,7 @@ class PetController {
 
   /**
    * @param {object} ctx
+   * @param {AuthSession} ctx.auth
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
@@ -47,7 +49,7 @@ class PetController {
       types: ['image'],
       size: '2mb',
     });
-    const fileName = await StorageProvider.saveFile(profilePics);
+    const fileName = await StorageProvider.saveFile(profilePics, 'pets');
 
     const pet = await Pet.create({
       name,
@@ -58,6 +60,16 @@ class PetController {
     });
 
     return response.json(pet);
+  }
+
+  /**
+   * @param {object} ctx
+   * @param {AuthSession} ctx.auth
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async update({ request, response, auth }) {
+    //
   }
 }
 

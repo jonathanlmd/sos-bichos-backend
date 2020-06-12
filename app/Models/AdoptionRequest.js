@@ -1,9 +1,8 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model');
-
 const { uuid } = require('uuidv4');
 
-class Pet extends Model {
+class AdoptionRequest extends Model {
   static boot() {
     super.boot();
     this.addHook('beforeCreate', async userInstance => {
@@ -13,19 +12,17 @@ class Pet extends Model {
     });
   }
 
-  usersWhoFavored() {
-    return this.belongsToMany(
-      'App/Models/User',
-      'id_pet',
-      'id_user',
-      'id',
-      'id'
-    ).pivotModel('App/Models/HasFavorite');
+  user() {
+    return this.belongsTo('App/Models/User', 'id_user', 'id');
   }
 
   owner() {
     return this.belongsTo('App/Models/Owner', 'id_owner', 'id');
   }
+
+  pet() {
+    return this.belongsTo('App/Models/Pet', 'id_pet', 'id');
+  }
 }
 
-module.exports = Pet;
+module.exports = AdoptionRequest;

@@ -52,6 +52,10 @@ class User extends Model {
     ).pivotModel('App/Models/HasFavorite');
   }
 
+  adoptionsRequests() {
+    return this.hasMany('App/Models/AdoptionRequest', 'id', 'id_user');
+  }
+
   static get hidden() {
     return ['password'];
   }

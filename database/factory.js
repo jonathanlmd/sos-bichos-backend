@@ -29,22 +29,24 @@ Factory.blueprint('App/Models/Token', (faker, i, data) => {
 
 Factory.blueprint('App/Models/Address', (faker, i, data) => {
   return {
-    public_place: faker.address(),
+    public_place: faker.zip({ plusfoour: true }),
     city: faker.city(),
     uf: faker.state({ length: 2 }),
-    country: faker.country(),
+    street: faker.address(),
+    district: faker.province(),
+    complement: faker.string(),
     ...data,
   };
 });
 
 Factory.blueprint('App/Models/Pet', (faker, i, data) => {
   return {
-    name: faker.name(),
+    name: faker.name().split(' ')[0],
     sex: faker.gender(),
     description: faker.string({ length: 20 }),
     rescued_at: faker.date(),
     avatar: faker.avatar(),
-    id_user_owner: null,
+    id_owner: null,
     ...data,
   };
 });

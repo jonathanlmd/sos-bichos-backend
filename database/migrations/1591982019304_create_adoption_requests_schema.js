@@ -7,19 +7,25 @@ class AdoptionRequests extends Schema {
       table.uuid('id').unique().primary().notNullable();
       table.boolean('approved').notNullable().defaultTo(false);
       table.boolean('completed').notNullable().defaultTo(false);
-      table.string('observations');
+      table.string('observations').defaultTo(null);
       table
-        .uuid('id_user_owner')
+        .uuid('id_user')
         .references('id')
         .inTable('users')
         .onDelete('SET NULL')
+        .onUpdate('CASCADE');
+      table
+        .uuid('id_owner')
+        .references('id')
+        .inTable('owners')
+        .onDelete('RESTRICT')
         .onUpdate('CASCADE')
-        .notNullable();
+        .defaultTo(null);
       table
         .uuid('id_pet')
         .references('id')
         .inTable('pets')
-        .onDelete('SET NULL')
+        .onDelete('RESTRICT')
         .onUpdate('CASCADE')
         .notNullable();
       table.date('approved_at');

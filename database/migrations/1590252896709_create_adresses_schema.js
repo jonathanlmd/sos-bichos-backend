@@ -13,8 +13,9 @@ class Addresses extends Schema {
         .onUpdate('CASCADE');
       table.string('public_place').notNullable();
       table.string('city').notNullable();
+      table.string('street').notNullable();
       table.string('uf').notNullable();
-      table.string('country').notNullable();
+      table.string('district').notNullable();
       table.string('complement');
       table.timestamps(true);
     });

@@ -57,4 +57,26 @@ Route.delete('/user/disfavor/:id', 'FavoriteController.destroy').middleware([
 
 Route.post('/pet', 'PetController.store').middleware(['auth:adminjwt']);
 
+Route.post(
+  '/user/adoption/request/',
+  'AdoptionRequestController.store'
+).middleware(['auth']);
+
+Route.get('/adoption/requests/', 'AdoptionRequestController.index').middleware([
+  'auth:adminjwt',
+]);
+
+Route.delete('/user', 'UsersController.delete').middleware(['auth']);
+Route.patch('/user/avatar', 'UsersController.updateAvatar').middleware([
+  'auth',
+]);
+
 Route.post('/session/social', 'SessionController.social');
+
+Route.put('/user', 'UsersController.update')
+  .validator(['UpdateUser'])
+  .middleware(['auth']);
+
+Route.get('/news/:page?', 'NewController.index').middleware(['auth']);
+
+Route.post('/news', 'NewController.store').middleware(['auth:adminjwt']);
