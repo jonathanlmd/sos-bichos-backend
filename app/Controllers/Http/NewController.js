@@ -14,15 +14,10 @@ class NewController {
    * @param {Response} ctx.response
    * @param {AuthSession} ctx.auth
    */
-  async index({ request, response }) {
-    const { page = 1 } = request.only(['page']);
-    const newsPage = await New.query().paginate(page, 10);
+  async index({ response }) {
+    const news = await New.all();
 
-    const formatPage = ({ data: news, ...pagination }) => {
-      return { pagination, news };
-    };
-
-    return response.json(formatPage(newsPage.toJSON()));
+    return response.json(news.toJSON());
   }
 
   /**
