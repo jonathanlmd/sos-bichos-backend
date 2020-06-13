@@ -29,17 +29,13 @@ class AdoptionRequestController {
 
     const user = await auth.getUser();
 
-    if (!user) {
-      return response.status(401).json({
-        status: 'error',
-        message: 'Unauthorized user',
-      });
-    }
-
     const adoptionRequest = await AdoptionRequest.create({
       id_user: user.id,
       id_pet: pet_id,
     });
+
+    pet.adopted = true;
+    await pet.save();
 
     return response.json({ id: adoptionRequest, user_id, pet_id });
   }
