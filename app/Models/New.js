@@ -10,6 +10,11 @@ class New extends Model {
         id: uuid(),
       });
     });
+    this.addHook('beforeSave', async userInstance => {
+      Object.assign(userInstance, {
+        id: uuid(),
+      });
+    });
   }
 }
 

@@ -19,8 +19,6 @@ class GoogleCloudStorage {
 
   async saveFile(file, path) {
     try {
-      console.log('OK aqui');
-
       const storage = new Storage({
         projectId: this.uploadConfig.projectId,
         region: this.uploadConfig.region,
@@ -30,8 +28,9 @@ class GoogleCloudStorage {
         },
       });
 
-      const name = `${path.endsWith('/') ? path : path}+'/'
-    }${crypto.randomBytes(10).toString('HEX')}-${file.clientName}`;
+      const name = `${
+        path.endsWith('/') ? path : `${path}/`
+      }${crypto.randomBytes(10).toString('HEX')}-${file.clientName}`;
       const [_, data] = await storage
         .bucket(this.uploadConfig.bucket)
         .upload(file.tmpPath, {
@@ -39,10 +38,6 @@ class GoogleCloudStorage {
           gzip: true,
           predefinedAcl: 'publicRead',
         });
-
-      console.log(name);
-      console.log(data);
-
       await fs.promises.unlink(file.tmpPath);
 
       return data.mediaLink;
