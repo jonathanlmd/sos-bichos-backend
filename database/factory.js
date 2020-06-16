@@ -51,6 +51,16 @@ Factory.blueprint('App/Models/Pet', (faker, i, data) => {
   };
 });
 
+Factory.blueprint('App/Models/New', (faker, i, data) => {
+  return {
+    title: faker.word(),
+    subtitle: faker.sentence({ words: 5 }),
+    body: faker.string({ length: 30 }),
+    folder: faker.url(),
+    ...data,
+  };
+});
+
 Factory.blueprint('App/Models/Admin', (faker, i, data) => {
   return {
     name: faker.name(),

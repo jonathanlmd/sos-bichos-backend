@@ -25,7 +25,7 @@ class PetController {
     };
 
     const petsForPage = await Pet.query()
-      .where('adopted', false)
+      .where('inAdoptionProcess', false)
       .paginate(page, 10);
 
     petsForPage.rows.forEach(pet => {

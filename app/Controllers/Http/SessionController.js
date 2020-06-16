@@ -15,6 +15,14 @@ class SessionController {
    */
   async store({ request, response, auth }) {
     const { email, password } = request.all();
+    const { authorization: refreshToken } = request.headers();
+
+    if (refreshToken) {
+      const token = await auth.generateForRefreshToken(
+        refreshToken.split(' ')[1]
+      );
+      return { token };
+    }
 
     const user = await User.findBy('email', email);
 
@@ -26,7 +34,7 @@ class SessionController {
     }
     await user.load('address');
 
-    const { token } = await auth.attempt(email, password);
+    const token = await auth.withRefreshToken().attempt(email, password);
 
     return { user, token };
   }
@@ -41,6 +49,14 @@ class SessionController {
   async social({ ally, request, response, auth }) {
     try {
       const { accessToken, provider } = request.all();
+      const { authorization: refreshToken } = request.headers();
+
+      if (refreshToken) {
+        const token = await auth.generateForRefreshToken(
+          refreshToken.split(' ')[1]
+        );
+        return { token };
+      }
 
       const providerUser = await ally
         .driver(provider)
@@ -57,7 +73,7 @@ class SessionController {
         userDetails
       );
 
-      const { token } = await auth.generate(user);
+      const token = await auth.withRefreshToken().generate(user);
 
       return response.json({ user, token });
     } catch (error) {

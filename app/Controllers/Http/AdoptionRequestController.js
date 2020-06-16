@@ -34,10 +34,10 @@ class AdoptionRequestController {
       id_pet: pet_id,
     });
 
-    pet.adopted = true;
+    pet.inAdoptionProcess = true;
     await pet.save();
 
-    return response.json({ id: adoptionRequest, user_id, pet_id });
+    return response.json({ adoptionRequest, user_id, pet_id });
   }
 
   /**
@@ -46,17 +46,8 @@ class AdoptionRequestController {
    * @param {Response} ctx.response
    * @param {AuthSession} ctx.auth
    */
-  async index({ request, response, auth }) {
+  async index({ request, response }) {
     const { page = 1 } = request.only(['page']);
-
-    const admin = auth.authenticator('adminjwt').getUser();
-
-    if (!admin) {
-      return response.status(400).json({
-        status: 'error',
-        message: 'Unauthorized',
-      });
-    }
 
     const formatPage = ({ data: adoption_requests, ...pagination }) => {
       return { pagination, adoption_requests };

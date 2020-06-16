@@ -10,6 +10,7 @@ class Pets extends Schema {
       table.string('description');
       table.string('avatar').notNullable();
       table.boolean('adopted').notNullable().defaultTo(false);
+      table.boolean('inAdoptionProcess').notNullable().defaultTo(false);
       table
         .uuid('id_owner')
         .references('id')
