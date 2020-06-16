@@ -23,6 +23,26 @@ test('it should be able to login', async ({ assert, client }) => {
   assert.exists(response.body.token);
 });
 
+test('it should be able to refresh token', async ({ assert, client }) => {
+  const sessionPayload = {
+    email: 'emailtest@test.com',
+    password: 'passwordtest',
+  };
+
+  await Factory.model('App/Models/User').create(sessionPayload);
+
+  const response = await client.post('/session').send(sessionPayload).end();
+  const finalResponse = await client
+    .post('/session')
+    .header('authorization', `Bearer ${response.body.token.refreshToken}`)
+    .end();
+
+  finalResponse.assertStatus(200);
+  assert.exists(finalResponse.body.token.token);
+  assert.exists(finalResponse.body.token.refreshToken);
+  assert.equal(finalResponse.body.token.token, response.body.token.token);
+});
+
 test('it should not be able to login with wrong email', async ({ client }) => {
   const sessionPayload = {
     email: 'emailtest@test.com',
@@ -68,4 +88,39 @@ test('it should not be able to login with wrong password', async ({
   response.assertError([
     { field: 'password', message: 'Invalid user password' },
   ]);
+});
+
+test('it should not be able to login without email or password', async ({
+  client,
+}) => {
+  const sessionPayload = {
+    email: 'emailtest@test.com',
+    password: 'passwordtest',
+  };
+
+  await Factory.model('App/Models/User').create(sessionPayload);
+
+  const responseWithoutPassword = await client
+    .post('/session')
+    .send({
+      email: sessionPayload.email,
+    })
+    .end();
+  const responseWithoutEmail = await client
+    .post('/session')
+    .send({
+      password: sessionPayload.password,
+    })
+    .end();
+
+  responseWithoutEmail.assertStatus(401);
+  responseWithoutPassword.assertStatus(401);
+  responseWithoutEmail.assertError({
+    status: 'error',
+    message: 'Email and password are requerid',
+  });
+  responseWithoutPassword.assertError({
+    status: 'error',
+    message: 'Email and password are requerid',
+  });
 });

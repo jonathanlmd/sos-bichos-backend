@@ -7,8 +7,8 @@ class DiskStorage {
     this.uploadConfig = Config;
   }
 
-  async saveFile(file) {
-    await file.move(this.uploadConfig.uploadsFolder, {
+  async saveFile(file, pathToStorage) {
+    await file.move(`${this.uploadConfig.uploadsFolder}/${pathToStorage}`, {
       name: `${crypto.randomBytes(10).toString('HEX')}-${file.clientName}`,
       overwrite: true,
     });

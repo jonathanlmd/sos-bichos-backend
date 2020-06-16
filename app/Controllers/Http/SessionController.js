@@ -24,6 +24,13 @@ class SessionController {
       return { token };
     }
 
+    if (!(email && password)) {
+      return response.status(401).json({
+        status: 'error',
+        message: 'Email and password are requerid',
+      });
+    }
+
     const user = await User.findBy('email', email);
 
     if (!user) {

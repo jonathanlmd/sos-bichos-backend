@@ -26,13 +26,6 @@ class FavoriteController {
 
     const user = await auth.getUser();
 
-    if (!user) {
-      return response.status(400).json({
-        status: 'error',
-        message: 'User not found',
-      });
-    }
-
     await user.favoritePets().attach(petId);
 
     return response.json(pet.toJSON());
@@ -40,13 +33,6 @@ class FavoriteController {
 
   async show({ response, auth }) {
     const user = await auth.getUser();
-
-    if (!user) {
-      return response.status(400).json({
-        status: 'error',
-        message: 'User not found',
-      });
-    }
 
     const pets = await user.favoritePets().fetch();
 
@@ -57,13 +43,6 @@ class FavoriteController {
     const { id: petId } = params;
 
     const user = await auth.getUser();
-
-    if (!user) {
-      return response.status(400).json({
-        status: 'error',
-        message: 'User not found',
-      });
-    }
 
     const pet = await Pet.findBy('id', petId);
 

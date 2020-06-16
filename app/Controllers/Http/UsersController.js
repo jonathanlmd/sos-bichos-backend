@@ -5,6 +5,9 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
 
+/** @type {typeof import('@adonisjs/framework/src/Hash')} */
+const Hash = use('Hash');
+
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Owner = use('App/Models/Owner');
 
@@ -22,14 +25,9 @@ class UsersController {
 
     const user = await User.create(userData);
 
-    if (!user) {
-      return response.status(500).json({
-        status: 'error',
-        message: 'Internal server error',
-      });
-    }
-
-    const { token } = await auth.attempt(userData.email, userData.password);
+    const token = await auth
+      .withRefreshToken()
+      .attempt(userData.email, userData.password);
 
     return response.json({ user, token });
   }
@@ -45,17 +43,17 @@ class UsersController {
 
     const user = await auth.getUser();
 
-    const matchPassword = auth.validate(user.email, password);
+    const matchPassword = await Hash.verify(password, user.password);
 
     if (!matchPassword) {
-      return response.status(500).json({
+      return response.status(401).json({
         status: 'error',
         message: "Password don't match",
       });
     }
 
     if (user.avatar) {
-      await StorageProvider.deleteFile(`user/${user.avatar}`);
+      await StorageProvider.deleteFile(`users/${user.avatar}`);
     }
 
     const adoptionRequests = await user.adoptionsRequests().fetch();
@@ -66,7 +64,7 @@ class UsersController {
       owner.email = user.email;
       owner.phone = user.phone;
 
-      Promise.all(
+      await Promise.all(
         adoptionRequests.rows.map(async adoptionRequest => {
           if (adoptionRequest.approved) {
             if (!owner.$persisted) {

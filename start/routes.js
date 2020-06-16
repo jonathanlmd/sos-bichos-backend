@@ -25,9 +25,7 @@ Route.post('/user/create', 'UsersController.store').validator([
   'PasswordConfirmation',
 ]);
 
-Route.post('/session', 'SessionController.store').validator([
-  'EmailForAuthentication',
-]);
+Route.post('/session', 'SessionController.store');
 
 Route.post('/session/adm', 'SessionAdmController.store').validator([
   'EmailForAuthentication',

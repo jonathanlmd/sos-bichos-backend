@@ -93,17 +93,10 @@ test('it should be able to list favorite pets from an user', async ({
 
   response.assertStatus(200);
 
-  assert.deepInclude(response.body, {
-    pagination: {
-      total: '3',
-      perPage: 10,
-      lastPage: 1,
-      page: 1,
-    },
-  });
-
-  assert.exists(response.body.pets);
-  assert.lengthOf(response.body.pets, 3);
+  assert.lengthOf(response.body, 3);
+  assert.include(response.body[0], { id: pets[0].toJSON().id });
+  assert.include(response.body[1], { id: pets[1].toJSON().id });
+  assert.include(response.body[2], { id: pets[2].toJSON().id });
 });
 
 test('it should not be able to list favorite pets if is not logged', async ({
@@ -112,4 +105,25 @@ test('it should not be able to list favorite pets if is not logged', async ({
   const response = await client.get('/user/favorites/?page=1').end();
 
   response.assertStatus(401);
+});
+
+test('it should not be able to disfavor a non-existent pet', async ({
+  client,
+}) => {
+  const pets = await Factory.model('App/Models/Pet').create();
+  const user = await Factory.model('App/Models/User').create();
+
+  await user.favoritePets().attach(pets.id);
+  const fakeId = uuid();
+
+  const response = await client
+    .delete(`/user/disfavor/${fakeId}`)
+    .loginVia(user, 'jwt')
+    .end();
+
+  response.assertStatus(400);
+  response.assertError({
+    status: 'error',
+    message: 'Pet not found',
+  });
 });
