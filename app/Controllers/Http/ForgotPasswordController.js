@@ -34,7 +34,7 @@ class ForgotPasswordController {
 
     await user.tokens().create({ token, type: 'forgotpassword' });
 
-    await Mail.send(
+    Mail.send(
       'forgotpassword',
       {
         name: user.name,

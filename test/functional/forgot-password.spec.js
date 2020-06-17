@@ -108,3 +108,25 @@ test('it should not be able reset password with expired token', async ({
     message: 'Token expired',
   });
 });
+
+test('it should not be able reset password with non-existent token', async ({
+  client,
+}) => {
+  const email = 'emailtest@test.com';
+
+  const user = await Factory.model('App/Models/User').create({ email });
+
+  const response = await client
+    .patch('/reset')
+    .send({
+      token: 'Invalid Token',
+      password: '12345',
+      password_confirmation: '12345',
+    })
+    .end();
+  response.assertStatus(409);
+  response.assertError({
+    status: 'error',
+    message: 'Invalid token',
+  });
+});

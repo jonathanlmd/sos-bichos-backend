@@ -34,6 +34,7 @@ class NewController {
       types: ['image'],
       size: '2mb',
     });
+
     const fileName = await StorageProvider.saveFile(folderPic, 'news');
 
     const storagedNew = await New.create({

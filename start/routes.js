@@ -77,4 +77,6 @@ Route.put('/user', 'UsersController.update')
 
 Route.get('/news/:page?', 'NewController.index').middleware(['auth']);
 
-Route.post('/news', 'NewController.store').middleware(['auth:adminjwt']);
+Route.post('/news', 'NewController.store')
+  .validator(['CreateNew'])
+  .middleware(['auth:adminjwt']);

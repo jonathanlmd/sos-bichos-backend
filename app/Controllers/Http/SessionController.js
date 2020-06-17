@@ -84,11 +84,10 @@ class SessionController {
 
       return response.json({ user, token });
     } catch (error) {
-      console.log(error);
-      return {
+      return response.status(400).json({
         status: 'error',
         message: 'Unable to authenticate. Try again later',
-      };
+      });
     }
   }
 }

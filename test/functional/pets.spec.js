@@ -35,6 +35,37 @@ test('it should be able list pets', async ({ assert, client }) => {
   assert.lengthOf(response.body.pets, 10);
 });
 
+test('it should be able list pets with favorited flag', async ({
+  assert,
+  client,
+}) => {
+  const user = await Factory.model('App/Models/User').create();
+  const pets = await Factory.model('App/Models/Pet').createMany(15);
+
+  await user.favoritePets().attach([pets[0].id, pets[1].id]);
+
+  const response = await client
+    .get('/pets/?page=1')
+    .loginVia(user, 'jwt')
+    .end();
+
+  response.assertStatus(200);
+
+  assert.deepInclude(response.body, {
+    pagination: {
+      total: '15',
+      perPage: 10,
+      lastPage: 2,
+      page: 1,
+    },
+  });
+
+  assert.exists(response.body.pets);
+  assert.lengthOf(response.body.pets, 10);
+  assert.isTrue(response.body.pets[0].favorited);
+  assert.isTrue(response.body.pets[1].favorited);
+});
+
 test('it should not be able to list pets without authentication', async ({
   client,
 }) => {
