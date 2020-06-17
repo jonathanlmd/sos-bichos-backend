@@ -14,6 +14,7 @@ class Addresses extends Schema {
       table.string('public_place').notNullable();
       table.string('city').notNullable();
       table.string('street').notNullable();
+      table.string('number').notNullable();
       table.string('uf').notNullable();
       table.string('district').notNullable();
       table.string('complement');

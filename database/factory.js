@@ -35,6 +35,7 @@ Factory.blueprint('App/Models/Address', (faker, i, data) => {
     street: faker.address(),
     district: faker.province(),
     complement: faker.string(),
+    number: String(faker.integer({ min: 0, max: 10000 })),
     ...data,
   };
 });

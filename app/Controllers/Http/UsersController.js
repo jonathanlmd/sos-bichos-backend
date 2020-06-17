@@ -137,41 +137,52 @@ class UsersController {
     const {
       name,
       email,
-      cellphone_number,
+      cellphone,
       profession,
       birthdate,
       address,
     } = request.all();
-    const { cep, street, city, uf, district, complement } = address;
+    const {
+      cep,
+      logradouro,
+      localidade,
+      uf,
+      bairro,
+      complemento,
+      numero,
+    } = address;
     const user = await auth.getUser();
+    console.log(address);
 
     const userAddress = await user.address().fetch();
 
     if (userAddress) {
       Object.assign(userAddress, {
         public_place: String(cep),
-        street,
-        city,
+        street: logradouro,
+        city: localidade,
         uf,
-        district,
-        complement,
+        district: bairro,
+        complement: complemento,
+        number: String(numero),
       });
       await userAddress.save();
     } else {
       await user.address().create({
         public_place: String(cep),
-        street,
-        city,
+        street: logradouro,
+        city: localidade,
         uf,
-        district,
-        complement,
+        district: bairro,
+        complement: complemento,
+        number: numero,
       });
     }
 
     Object.assign(user, {
       name,
       email,
-      phone: cellphone_number,
+      phone: cellphone,
       profession,
       birthdate,
     });
@@ -180,7 +191,25 @@ class UsersController {
 
     await user.load('address');
 
-    return response.json(user.toJSON());
+    const savedAddress = user.toJSON().address;
+
+    return response.json({
+      name: user.name,
+      avatar: user.avatar,
+      email: user.email,
+      profession: user.profession,
+      birthdate: user.birthdate,
+      cellphone: user.phone,
+      address: {
+        cep: savedAddress.public_place,
+        logradouro: savedAddress.street,
+        localidade: savedAddress.city,
+        uf: savedAddress.uf,
+        bairro: savedAddress.district,
+        complemento: savedAddress.complement,
+        numero: savedAddress.number,
+      },
+    });
   }
 }
 
