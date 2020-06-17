@@ -20,63 +20,37 @@ Route.get('/', ({ response }) => {
   });
 });
 
+Route.group(() => {
+  Route.patch('/user/favorite/:id', 'FavoriteController.store');
+  Route.get('/user/favorites/:page?', 'FavoriteController.show');
+  Route.delete('/user/disfavor/:id', 'FavoriteController.destroy');
+  Route.delete('/user/', 'UsersController.delete');
+  Route.post('/user/adoption/request/', 'AdoptionRequestController.store');
+  Route.patch('/user/avatar', 'UsersController.updateAvatar');
+  Route.put('/user', 'UsersController.update').validator(['UpdateUser']);
+
+  Route.get('/pets/:page?', 'PetController.index');
+  Route.get('/news/:page?', 'NewController.index');
+}).middleware(['auth']);
+
 Route.post('/user/create', 'UsersController.store').validator([
   'EmailExistent',
   'PasswordConfirmation',
 ]);
-
+Route.post('/session/social', 'SessionController.social');
 Route.post('/session', 'SessionController.store');
-
 Route.post('/session/adm', 'SessionAdmController.store').validator([
   'EmailForAuthentication',
 ]);
-
 Route.post('/forgot', 'ForgotPasswordController.store').validator([
   'EmailForAuthentication',
 ]);
-
 Route.patch('/reset', 'ResetPasswordController.update').validator(
   'PasswordConfirmation'
 );
 
-Route.get('pets/:page?', 'PetController.index').middleware(['auth']);
-
-Route.patch('/user/favorite/:id', 'FavoriteController.store').middleware([
-  'auth',
-]);
-
-Route.get('/user/favorites/:page?', 'FavoriteController.show').middleware([
-  'auth',
-]);
-
-Route.delete('/user/disfavor/:id', 'FavoriteController.destroy').middleware([
-  'auth',
-]);
-
-Route.post('/pet', 'PetController.store').middleware(['auth:adminjwt']);
-
-Route.post(
-  '/user/adoption/request/',
-  'AdoptionRequestController.store'
-).middleware(['auth']);
-
-Route.get('/adoption/requests/', 'AdoptionRequestController.index').middleware([
-  'auth:adminjwt',
-]);
-
-Route.delete('/user', 'UsersController.delete').middleware(['auth']);
-Route.patch('/user/avatar', 'UsersController.updateAvatar').middleware([
-  'auth',
-]);
-
-Route.post('/session/social', 'SessionController.social');
-
-Route.put('/user', 'UsersController.update')
-  .validator(['UpdateUser'])
-  .middleware(['auth']);
-
-Route.get('/news/:page?', 'NewController.index').middleware(['auth']);
-
-Route.post('/news', 'NewController.store')
-  .validator(['CreateNew'])
-  .middleware(['auth:adminjwt']);
+Route.group(() => {
+  Route.post('/news', 'NewController.store').validator(['CreateNew']);
+  Route.get('/adoption/requests/', 'AdoptionRequestController.index');
+  Route.post('/pet', 'PetController.store');
+}).middleware(['auth:adminjwt']);
