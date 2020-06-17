@@ -152,7 +152,6 @@ class UsersController {
       numero,
     } = address;
     const user = await auth.getUser();
-    console.log(address);
 
     const userAddress = await user.address().fetch();
 
@@ -194,11 +193,14 @@ class UsersController {
     const savedAddress = user.toJSON().address;
 
     return response.json({
+      id: user.id,
       name: user.name,
       avatar: user.avatar,
       email: user.email,
       profession: user.profession,
       birthdate: user.birthdate,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
       cellphone: user.phone,
       address: {
         cep: savedAddress.public_place,

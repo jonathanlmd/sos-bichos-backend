@@ -256,16 +256,17 @@ test('it should be able to update profile data', async ({ client, assert }) => {
   const data = {
     name: 'Nome Teste',
     email: 'emailtest@test.com',
-    cellphone_number: '420000000',
+    cellphone: '420000000',
     profession: 'teste',
     birthdate: String(birthdate.toISOString()),
     address: {
       cep: 84052689,
-      street: 'Av. Brasil',
-      city: 'TestCity',
+      logradouro: 'Av. Brasil',
+      localidade: 'TestCity',
       uf: 'TS',
-      district: 'Testing',
-      complement: 'Casa',
+      bairro: 'Testing',
+      complemento: 'Casa',
+      numero: 125,
     },
   };
 
@@ -279,7 +280,9 @@ test('it should be able to update profile data', async ({ client, assert }) => {
 
   response.assertStatus(200);
   const parsedUser = user.toJSON();
+  Object.assign(parsedUser, { cellphone: parsedUser.phone });
   delete parsedUser.birthdate;
+  delete parsedUser.phone;
 
   assert.nestedInclude(response.body, parsedUser);
 });
@@ -302,16 +305,17 @@ test('it should be able to update profile data with existent address', async ({
   const data = {
     name: 'Nome Teste',
     email: 'emailtest@test.com',
-    cellphone_number: '420000000',
+    cellphone: '420000000',
     profession: 'teste',
     birthdate: String(birthdate.toISOString()),
     address: {
       cep: 84052689,
-      street: 'Av. Brasil',
-      city: 'TestCity',
+      logradouro: 'Av. Brasil',
+      localidade: 'TestCity',
       uf: 'TS',
-      district: 'Testing',
-      complement: 'Casa',
+      bairro: 'Testing',
+      complemento: 'Casa',
+      numero: 125,
     },
   };
 
@@ -325,7 +329,9 @@ test('it should be able to update profile data with existent address', async ({
 
   response.assertStatus(200);
   const parsedUser = user.toJSON();
+  Object.assign(parsedUser, { cellphone: parsedUser.phone });
   delete parsedUser.birthdate;
+  delete parsedUser.phone;
 
   assert.nestedInclude(response.body, parsedUser);
 });
