@@ -196,7 +196,7 @@ class UsersController {
       updated_at: user.updated_at,
       cellphone: user.phone,
       address: {
-        cep: savedAddress.public_place,
+        cep: savedAddress.public_place.split('-').join(''),
         logradouro: savedAddress.street,
         localidade: savedAddress.city,
         uf: savedAddress.uf,
