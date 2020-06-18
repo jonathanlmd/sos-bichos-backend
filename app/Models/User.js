@@ -52,6 +52,16 @@ class User extends Model {
     ).pivotModel('App/Models/HasFavorite');
   }
 
+  savedPets() {
+    return this.belongsToMany(
+      'App/Models/Pet',
+      'id_user',
+      'id_pet',
+      'id',
+      'id'
+    ).pivotModel('App/Models/Advert');
+  }
+
   adoptionsRequests() {
     return this.hasMany('App/Models/AdoptionRequest', 'id', 'id_user');
   }

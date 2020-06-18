@@ -5,7 +5,7 @@ class Adverts extends Schema {
   up() {
     this.create('adverts', table => {
       table.uuid('id').unique().primary().notNullable();
-      table.integer('times').notNullable().notNullable();
+      table.integer('times').notNullable().defaultTo(1);
       table
         .uuid('id_user')
         .references('id')
@@ -20,6 +20,7 @@ class Adverts extends Schema {
         .onDelete('SET NULL')
         .onUpdate('CASCADE')
         .notNullable();
+      table.timestamps(false);
     });
   }
 

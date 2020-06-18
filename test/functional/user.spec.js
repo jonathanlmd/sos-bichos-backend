@@ -24,6 +24,7 @@ test('it should be able to create a new user', async ({ assert, client }) => {
       name: 'User test',
       email: 'emailtest@test.com',
       password: 'passwordtest',
+      password_confirmation: 'passwordtest',
     })
     .end();
 
@@ -48,16 +49,50 @@ test('it should not be able to create a new user with duplicate email ', async (
     .send({
       name: 'User test 2',
       email: 'emailtest@test.com',
-      password: 'passwordtest',
-      password_confirmation: 'passwordtest',
+      password: 'passwordtest2',
+      password_confirmation: 'passwordtest2',
     })
     .end();
 
-  response.assertStatus(409);
-  assert.deepInclude(response.body.errors, {
-    title: 'unique',
-    detail: 'This E-mail already exist',
-    source: { pointer: 'email' },
+  response.assertStatus(400);
+  assert.deepInclude(response.body, {
+    status: 'error',
+    message: 'This E-mail already exist',
+  });
+});
+
+test('it should not be able to create a new user without confirm password or wrong password confirmation', async ({
+  assert,
+  client,
+}) => {
+  const responseWithoutConfirmation = await client
+    .post('/user/create')
+    .send({
+      name: 'User test',
+      email: 'emailtest@test.com',
+      password: 'passwordtest',
+    })
+    .end();
+  const responseWithWrongConfirmation = await client
+    .post('/user/create')
+    .send({
+      name: 'User test',
+      email: 'emailtest@test.com',
+      password: 'passwordtest',
+      password_confirmation: 'wrongpassword',
+    })
+    .end();
+
+  responseWithoutConfirmation.assertStatus(400);
+  responseWithWrongConfirmation.assertStatus(400);
+
+  assert.deepEqual(responseWithoutConfirmation.body, {
+    status: 'error',
+    message: 'Password confirmation is required',
+  });
+  assert.deepEqual(responseWithWrongConfirmation.body, {
+    status: 'error',
+    message: "Password and confirmation don't match",
   });
 });
 

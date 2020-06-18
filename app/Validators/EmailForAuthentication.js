@@ -13,8 +13,10 @@ class EmailForAuthentication {
   }
 
   async fails(errorMessages) {
-    console.log(errorMessages);
-    return this.ctx.response.json(errorMessages);
+    return this.ctx.response.status(400).json({
+      status: 'error',
+      message: errorMessages[0].message,
+    });
   }
 }
 

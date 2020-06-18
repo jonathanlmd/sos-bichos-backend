@@ -21,22 +21,25 @@ Route.get('/', ({ response }) => {
 });
 
 Route.group(() => {
-  Route.patch('/user/favorite/:id', 'FavoriteController.store');
   Route.get('/user/favorites/:page?', 'FavoriteController.show');
+  Route.get('/user/ads', 'AdvertController.show');
+
+  Route.post('/user/adoption/request/', 'AdoptionRequestController.store');
+  Route.post('/user/ads/:petId', 'AdvertController.store');
+
+  Route.put('/user', 'UsersController.update').validator(['UpdateUser']);
+
+  Route.patch('/user/avatar', 'UsersController.updateAvatar');
+  Route.patch('/user/favorite/:id', 'FavoriteController.store');
+
   Route.delete('/user/disfavor/:id', 'FavoriteController.destroy');
   Route.delete('/user/', 'UsersController.delete');
-  Route.post('/user/adoption/request/', 'AdoptionRequestController.store');
-  Route.patch('/user/avatar', 'UsersController.updateAvatar');
-  Route.put('/user', 'UsersController.update').validator(['UpdateUser']);
 
   Route.get('/pets/:page?', 'PetController.index');
   Route.get('/news/:page?', 'NewController.index');
 }).middleware(['auth']);
 
-Route.post('/user/create', 'UsersController.store').validator([
-  'EmailExistent',
-  'PasswordConfirmation',
-]);
+Route.post('/user/create', 'UsersController.store').validator('CreateUser');
 Route.post('/session/social', 'SessionController.social');
 Route.post('/session', 'SessionController.store');
 Route.post('/session/adm', 'SessionAdmController.store').validator([

@@ -25,7 +25,6 @@ test('it should be able to login as Admin', async ({ client, assert }) => {
 
 test('it should not be able to login as Admin with wron email or password', async ({
   client,
-  assert,
 }) => {
   const admin = await Factory.model('App/Models/Admin').create({
     email: 'email@test.com',
@@ -46,5 +45,31 @@ test('it should not be able to login as Admin with wron email or password', asyn
   responseWithWrongEmail.assertError({
     status: 'error',
     message: "Email or password don't match",
+  });
+});
+
+test('it should not be able to login as Admin without email or with invalid email', async ({
+  client,
+  assert,
+}) => {
+  const responseWithInvalidEmail = await client
+    .post('/session/adm')
+    .send({ email: 'invalid email', password: 'passwordtest' })
+    .end();
+  const responseWithoutEmail = await client
+    .post('/session/adm')
+    .send({ password: 'passwordtest' })
+    .end();
+
+  responseWithInvalidEmail.assertStatus(400);
+  responseWithoutEmail.assertStatus(400);
+
+  assert.deepEqual(responseWithInvalidEmail.body, {
+    status: 'error',
+    message: 'Invalid e-mail',
+  });
+  assert.deepEqual(responseWithoutEmail.body, {
+    status: 'error',
+    message: 'E-mail is required',
   });
 });

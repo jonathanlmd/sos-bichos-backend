@@ -107,13 +107,6 @@ class UsersController {
 
     const fileName = await StorageProvider.saveFile(profilePic, 'users');
 
-    if (!fileName) {
-      return response.status(400).json({
-        status: 'error',
-        message: 'Was not possible to update avatar',
-      });
-    }
-
     if (user.avatar) {
       await StorageProvider.deleteFile(`users/${user.avatar}`);
     }

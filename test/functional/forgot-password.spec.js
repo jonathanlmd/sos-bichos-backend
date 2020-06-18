@@ -81,6 +81,46 @@ test('it should be able reset password', async ({ assert, client }) => {
   assert.isTrue(checkPassword);
 });
 
+test('it should not be able reset password without or wrong password confirmation', async ({
+  assert,
+  client,
+}) => {
+  const email = 'emailtest@test.com';
+
+  const user = await Factory.model('App/Models/User').create({ email });
+  const userToken = await Factory.model('App/Models/Token').make();
+
+  await user.tokens().save(userToken);
+
+  const responseWithoutConfirmation = await client
+    .patch('/reset')
+    .send({
+      token: userToken.token,
+      password: 'passwordtest',
+    })
+    .end();
+  const responseWithWrongConfirmation = await client
+    .patch('/reset')
+    .send({
+      token: userToken.token,
+      password: 'passwordtest',
+      password_confirmation: 'wrongpassword',
+    })
+    .end();
+
+  responseWithoutConfirmation.assertStatus(400);
+  responseWithWrongConfirmation.assertStatus(400);
+
+  assert.deepEqual(responseWithoutConfirmation.body, {
+    status: 'error',
+    message: 'Password confirmation is required',
+  });
+  assert.deepEqual(responseWithWrongConfirmation.body, {
+    status: 'error',
+    message: "Password and confirmation don't match",
+  });
+});
+
 test('it should not be able reset password with expired token', async ({
   client,
 }) => {

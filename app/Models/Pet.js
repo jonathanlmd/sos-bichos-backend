@@ -23,6 +23,16 @@ class Pet extends Model {
     ).pivotModel('App/Models/HasFavorite');
   }
 
+  usersWhoSaveMe() {
+    return this.belongsToMany(
+      'App/Models/User',
+      'id_pet',
+      'id_user',
+      'id',
+      'id'
+    ).pivotModel('App/Models/Advert');
+  }
+
   owner() {
     return this.belongsTo('App/Models/Owner', 'id_owner', 'id');
   }
