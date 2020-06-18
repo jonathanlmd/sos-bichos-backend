@@ -370,3 +370,159 @@ test('it should be able to update profile data with existent address', async ({
 
   assert.nestedInclude(response.body, parsedUser);
 });
+
+test('it should not be able to update profile data with email that already exist', async ({
+  client,
+  assert,
+}) => {
+  await Factory.model('App/Models/User').create({
+    name: 'OutroFulano',
+    email: 'outrofulano@test.com',
+    password: 'passwordtest',
+  });
+  const user = await Factory.model('App/Models/User').create({
+    name: 'Fulano',
+    email: 'fulano@test.com',
+    password: 'passwordtest',
+  });
+
+  const birthdate = new Date(1997, 5, 5);
+  const data = {
+    name: 'Nome Teste',
+    email: 'outrofulano@test.com',
+    cellphone: '420000000',
+    profession: 'teste',
+    birthdate: String(birthdate.toISOString()),
+    address: {
+      cep: '84052-689',
+      logradouro: 'Av. Brasil',
+      localidade: 'TestCity',
+      uf: 'TS',
+      bairro: 'Testing',
+      complemento: 'Casa',
+      numero: 125,
+    },
+  };
+
+  const response = await client
+    .put('/user')
+    .send(data)
+    .loginVia(user, 'jwt')
+    .end();
+
+  response.assertStatus(400);
+
+  assert.deepEqual(response.body, {
+    status: 'error',
+    message: 'This E-mail already exist',
+  });
+});
+
+test('it should not be able to update profile data without or with invalid email', async ({
+  client,
+  assert,
+}) => {
+  const user = await Factory.model('App/Models/User').create({
+    name: 'Fulano',
+    email: 'fulano@test.com',
+    password: 'passwordtest',
+  });
+
+  const birthdate = new Date(1997, 5, 5);
+  const data = {
+    name: 'Nome Teste',
+    email: 'outrofulano@test.com',
+    cellphone: '420000000',
+    profession: 'teste',
+    birthdate: String(birthdate.toISOString()),
+    address: {
+      cep: '84052-689',
+      logradouro: 'Av. Brasil',
+      localidade: 'TestCity',
+      uf: 'TS',
+      bairro: 'Testing',
+      complemento: 'Casa',
+      numero: 125,
+    },
+  };
+
+  const responseWithInvalidEmail = await client
+    .put('/user')
+    .send({ ...data, email: 'invali email' })
+    .loginVia(user, 'jwt')
+    .end();
+  delete data.email;
+
+  const responseWithoutEmail = await client
+    .put('/user')
+    .send(data)
+    .loginVia(user, 'jwt')
+    .end();
+
+  responseWithInvalidEmail.assertStatus(400);
+  responseWithoutEmail.assertStatus(400);
+
+  assert.deepEqual(responseWithInvalidEmail.body, {
+    status: 'error',
+    message: 'Invalid e-mail',
+  });
+  assert.deepEqual(responseWithoutEmail.body, {
+    status: 'error',
+    message: 'E-mail is required',
+  });
+});
+
+test('it should not be able to update profile data without name or birthdate', async ({
+  client,
+  assert,
+}) => {
+  const user = await Factory.model('App/Models/User').create({
+    name: 'Fulano',
+    email: 'fulano@test.com',
+    password: 'passwordtest',
+  });
+
+  const birthdate = new Date(1997, 5, 5);
+  const data = {
+    name: 'Nome Teste',
+    email: 'outrofulano@test.com',
+    cellphone: '420000000',
+    profession: 'teste',
+    birthdate: String(birthdate.toISOString()),
+    address: {
+      cep: '84052-689',
+      logradouro: 'Av. Brasil',
+      localidade: 'TestCity',
+      uf: 'TS',
+      bairro: 'Testing',
+      complemento: 'Casa',
+      numero: 125,
+    },
+  };
+
+  delete data.name;
+  const responseWithoutName = await client
+    .put('/user')
+    .send(data)
+    .loginVia(user, 'jwt')
+    .end();
+  Object.assign(data, { name: 'Nome Teste' });
+  delete data.birthdate;
+  const responseWithoutBirthdate = await client
+    .put('/user')
+    .send(data)
+    .loginVia(user, 'jwt')
+    .end();
+
+  responseWithoutName.assertStatus(400);
+  responseWithoutBirthdate.assertStatus(400);
+
+  assert.deepEqual(responseWithoutName.body, {
+    status: 'error',
+    message: 'Name is required',
+  });
+  assert.deepEqual(responseWithoutBirthdate.body, {
+    status: 'error',
+    message: 'Birthdate is required',
+  });
+});

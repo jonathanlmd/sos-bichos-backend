@@ -36,7 +36,7 @@ Route.group(() => {
   Route.delete('/user/', 'UsersController.delete');
 
   Route.get('/pets/:page?', 'PetController.index');
-  Route.get('/news/:page?', 'NewController.index');
+  Route.get('/news', 'NewController.index');
 }).middleware(['auth']);
 
 Route.post('/user/create', 'UsersController.store').validator('CreateUser');

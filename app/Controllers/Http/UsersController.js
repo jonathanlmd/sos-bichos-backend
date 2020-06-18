@@ -147,6 +147,14 @@ class UsersController {
     const user = await auth.getUser();
 
     const userAddress = await user.address().fetch();
+    const emailAlreadyExist = await User.findBy('email', email);
+
+    if (user.email !== email && emailAlreadyExist) {
+      return response.status(400).json({
+        status: 'error',
+        message: 'This E-mail already exist',
+      });
+    }
 
     if (userAddress) {
       Object.assign(userAddress, {
