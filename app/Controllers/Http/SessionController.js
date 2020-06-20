@@ -41,9 +41,35 @@ class SessionController {
     }
     await user.load('address');
 
+    const savedAddress = user.toJSON().address;
+
     const token = await auth.withRefreshToken().attempt(email, password);
 
-    return { user, token };
+    return {
+      user: {
+        id: user.id,
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+        profession: user.profession,
+        birthdate: user.birthdate,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        cellphone: user.phone,
+        address: savedAddress
+          ? {
+              cep: savedAddress.public_place.split('-').join(''),
+              logradouro: savedAddress.street,
+              localidade: savedAddress.city,
+              uf: savedAddress.uf,
+              bairro: savedAddress.district,
+              complemento: savedAddress.complement,
+              numero: savedAddress.number,
+            }
+          : null,
+      },
+      token,
+    };
   }
 
   /**
@@ -80,9 +106,37 @@ class SessionController {
         userDetails
       );
 
+      await user.load('address');
+
+      const savedAddress = user.toJSON().address;
+
       const token = await auth.withRefreshToken().generate(user);
 
-      return response.json({ user, token });
+      return response.json({
+        user: {
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar,
+          email: user.email,
+          profession: user.profession,
+          birthdate: user.birthdate,
+          created_at: user.created_at,
+          updated_at: user.updated_at,
+          cellphone: user.phone,
+          address: savedAddress
+            ? {
+                cep: savedAddress.public_place.split('-').join(''),
+                logradouro: savedAddress.street,
+                localidade: savedAddress.city,
+                uf: savedAddress.uf,
+                bairro: savedAddress.district,
+                complemento: savedAddress.complement,
+                numero: savedAddress.number,
+              }
+            : null,
+        },
+        token,
+      });
     } catch (error) {
       return response.status(400).json({
         status: 'error',
